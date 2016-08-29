@@ -6,7 +6,10 @@
 
 package futils
 
-import "io/ioutil"
+import (
+	"io/ioutil"
+	"os"
+)
 
 func DirList(dirname string) ([]string, error) {
 	filelist := make([]string, 0)
@@ -21,4 +24,16 @@ func DirList(dirname string) ([]string, error) {
 	}
 
 	return filelist, nil
+}
+
+func WriteFile(filename string, data []byte) error {
+	return ioutil.WriteFile(filename, data, os.ModePerm)
+}
+
+func WriteFileOrDir(name, data []byte) error {
+	if len(data) == 0 {
+		return os.MkdirAll(name, os.ModePerm)
+	}
+
+	return WriteFile(name, data)
 }
