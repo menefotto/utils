@@ -24,7 +24,12 @@ func IsTarFile(filename string) (bool, error) {
 	return true, nil
 }
 
-func TarExtractor(filename string) (map[string][]byte, error) {
+type TarEntry struct {
+	Data []byte
+	Mode os.FileMode
+}
+
+func TarExtractor(filename string) (map[string]*TarEntry, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -32,7 +37,7 @@ func TarExtractor(filename string) (map[string][]byte, error) {
 	defer file.Close()
 
 	ar := tar.NewReader(file)
-	data := make(map[string][]byte, 0)
+	data := make(map[string]*TarEntry, 0)
 
 	for {
 		header, err := ar.Next()
@@ -49,9 +54,8 @@ func TarExtractor(filename string) (map[string][]byte, error) {
 			return nil, err
 		}
 
-		data[header.Name] = content
+		data[header.Name] = &TarEntry{Data: content, Mode: header.FileInfo().Mode()}
 	}
-
 	return data, nil
 
 }

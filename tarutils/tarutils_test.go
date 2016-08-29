@@ -10,7 +10,7 @@ func TestTarExtract(t *testing.T) {
 
 	i := 0
 	for k, v := range datamap {
-		t.Logf("File path/name is: %s size is: %d\n", k, len(v))
+		t.Logf("File path/name is: %s size is: %d\n", k, len(v.Data))
 		i++
 	}
 

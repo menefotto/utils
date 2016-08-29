@@ -26,14 +26,10 @@ func DirList(dirname string) ([]string, error) {
 	return filelist, nil
 }
 
-func WriteFile(filename string, data []byte) error {
-	return ioutil.WriteFile(filename, data, os.ModePerm)
-}
-
-func WriteFileOrDir(name, data []byte) error {
+func WriteFileOrDir(name string, data []byte, mode os.FileMode) error {
 	if len(data) == 0 {
-		return os.MkdirAll(name, os.ModePerm)
+		return os.MkdirAll(name, mode)
 	}
 
-	return WriteFile(name, data)
+	return ioutil.WriteFile(name, data, mode)
 }
