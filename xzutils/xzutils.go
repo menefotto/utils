@@ -8,7 +8,7 @@ import (
 	xz "github.com/remyoudompheng/go-liblzma"
 )
 
-func XzDecompress(data interface{}) ([]byte, error) {
+func Decompress(data interface{}) ([]byte, error) {
 	var inbuffer *bytes.Buffer
 
 	switch data.(type) {
@@ -37,7 +37,7 @@ func XzDecompress(data interface{}) ([]byte, error) {
 	return outbuffer.Bytes(), nil
 }
 
-func FileXzDecompress(filename string) ([]byte, error) {
+func FileDecompress(filename string) ([]byte, error) {
 	f, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -55,14 +55,14 @@ func FileXzDecompress(filename string) ([]byte, error) {
 		return nil, err
 	}
 
-	bytes, err := XzDecompress(data)
+	bytes, err := Decompress(data)
 	if err != nil {
 		return nil, err
 	}
 	return bytes, nil
 }
 
-func XzCompress(data interface{}) ([]byte, error) {
+func Compress(data interface{}) ([]byte, error) {
 	var buffer bytes.Buffer
 
 	compressor, err := xz.NewWriter(&buffer, xz.LevelDefault)
@@ -89,7 +89,7 @@ func XzCompress(data interface{}) ([]byte, error) {
 	return buffer.Bytes(), nil
 }
 
-func FileXzCompress(filein, fileout string) error {
+func FileCompress(filein, fileout string) error {
 	fin, err := os.Open(filein)
 	if err != nil {
 		return err
@@ -107,7 +107,7 @@ func FileXzCompress(filein, fileout string) error {
 		return err
 	}
 
-	compressed, err := XzCompress(data)
+	compressed, err := Compress(data)
 	if err != nil {
 		return err
 	}

@@ -21,7 +21,7 @@ func TestFileCompression(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := XzCompress(dat)
+	data, err := Compress(dat)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -48,7 +48,7 @@ func TestXzDecompress(t *testing.T) {
 		t.Error(err)
 	}
 
-	b, err := XzDecompress(data)
+	b, err := Decompress(data)
 	if err != nil {
 		t.Log(err)
 	}
@@ -59,7 +59,7 @@ func TestXzDecompress(t *testing.T) {
 }
 
 func TestFileXzDecompress(t *testing.T) {
-	data, err := FileXzDecompress("test.txt.xz")
+	data, err := FileDecompress("test.txt.xz")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -70,7 +70,7 @@ func TestFileXzDecompress(t *testing.T) {
 }
 
 func TestFileXzCompress(t *testing.T) {
-	err := FileXzCompress("test.txt", "test.xz")
+	err := FileCompress("test.txt", "test.xz")
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -2,6 +2,7 @@ package tarutils
 
 import (
 	"archive/tar"
+	"bytes"
 	"errors"
 	"io"
 	"os"
@@ -29,16 +30,26 @@ type TarEntry struct {
 	Mode os.FileMode
 }
 
-func TarExtractor(filename string) (map[string]*TarEntry, error) {
+func FileExtractor(filename string) (map[string]*TarEntry, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
 
-	ar := tar.NewReader(file)
-	data := make(map[string]*TarEntry, 0)
+	return extractor(file)
+}
 
+func Extractor(tarbytes []byte) (map[string]*TarEntry, error) {
+	buffer := bytes.NewReader(tarbytes)
+
+	return extractor(buffer)
+}
+
+func extractor(reader io.Reader) (map[string]*TarEntry, error) {
+	ar := tar.NewReader(reader)
+
+	data := make(map[string]*TarEntry, 0)
 	for {
 		header, err := ar.Next()
 		if err == io.EOF {

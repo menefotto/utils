@@ -3,7 +3,7 @@ package tarutils
 import "testing"
 
 func TestTarExtract(t *testing.T) {
-	datamap, err := TarExtractor("i3lock-2.8-1-x86_64.pkg.tar")
+	datamap, err := FileExtractor("i3lock-2.8-1-x86_64.pkg.tar")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -20,7 +20,7 @@ func TestTarExtract(t *testing.T) {
 }
 
 func TestTarNoExist(t *testing.T) {
-	_, err := TarExtractor("nonesiste.tar")
+	_, err := FileExtractor("nonesiste.tar")
 	if err == nil {
 		t.Fatal("Testing error condition gone!")
 	}
