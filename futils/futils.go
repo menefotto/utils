@@ -65,6 +65,19 @@ func CopyFile(source, destination string) error {
 	return ioutil.WriteFile(destination, content, info.Mode())
 }
 
+func MoveFile(source, destination string) error {
+	err := CopyFile(source, destination)
+	if err != nil {
+		return err
+	}
+
+	err = os.Remove(source)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func IsRootUser() bool {
 	if os.Geteuid() != 0 {
 		return false
