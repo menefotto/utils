@@ -2,8 +2,11 @@ package futils
 
 import (
 	"fmt"
+	"log/syslog"
 	"os"
+	"syslogger"
 	"testing"
+	"time"
 )
 
 func TestDirList(t *testing.T) {
@@ -53,4 +56,20 @@ func TestMoveFile(t *testing.T) {
 		t.Fatal(err)
 	}
 	os.Remove(d)
+}
+
+func TestFileMover(t *testing.T) {
+	s := "/tmp/"
+	d := "/var/cache/sonic/pkgs/"
+	filename := "tar-1.29-1-x86_64.pkg.tar.xz"
+
+	err := CopyFile(d+filename, s+filename)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	mover := NewFileMover(syslogger.NewLogger("testmover", syslog.LOG_ERR))
+	mover.Send(s+filename, d+filename)
+	time.Sleep(time.Second * 2)
+	mover.Close()
 }

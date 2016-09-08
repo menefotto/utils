@@ -14,18 +14,19 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"path"
 	"sync"
 	"time"
 )
 
-func DownloadMulti(baseurl string, pkgs []string) chan error {
+func DownloadMulti(baseurl, saveto string, pkgs []string) chan error {
 	errchan := make(chan error)
 	var wg sync.WaitGroup
 
 	for _, pkg := range pkgs {
 		wg.Add(1)
 		go func(baseurl, pkgname string, wg sync.WaitGroup) {
-			err := DownloadSingle(baseurl, pkgname)
+			err := DownloadSingle(baseurl, saveto, pkgname)
 			if err != nil {
 				errchan <- fmt.Errorf("name: %v,%v\n", pkg, err)
 			} else {
@@ -37,7 +38,7 @@ func DownloadMulti(baseurl string, pkgs []string) chan error {
 	return errchan
 }
 
-func DownloadSingle(baseurl, pkgname string) error {
+func DownloadSingle(baseurl, saveto, pkgname string) error {
 	client := clientInit()
 	resp, err := client.Get(baseurl + pkgname)
 	if err != nil {
@@ -54,7 +55,8 @@ func DownloadSingle(baseurl, pkgname string) error {
 		return err
 	}
 
-	err = ioutil.WriteFile(pkgname, data, os.ModePerm)
+	var fmode os.FileMode = 0666
+	err = ioutil.WriteFile(path.Join(saveto, pkgname), data, fmode)
 	if err != nil {
 		return err
 	}

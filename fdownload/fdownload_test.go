@@ -17,7 +17,7 @@ func TestClietInit(t *testing.T) {
 func TestSingleDownload(t *testing.T) {
 	base := "http://archlinux.polymorf.fr/core/os/x86_64/"
 	pkgname := "acl-2.2.52-2-x86_64.pkg.tar.xz"
-	err := DownloadSingle(base, pkgname)
+	err := DownloadSingle(base, ".", pkgname)
 	if err != nil {
 		t.Errorf("Error: ", err)
 	}
@@ -29,12 +29,10 @@ func TestDownloadMulti(t *testing.T) {
 
 	pkgnames := []string{
 		"acl-2.2.52-2-x86_64.pkg.tar.xz",
-		"attr-2.4.47-1-x86_64.pkg.tar.xz",
 		"bash-4.3.046-1-x86_64.pkg.tar.xz",
-		"automake-1.15-1-any.pkg.tar.xz",
 	}
 
-	errchan := DownloadMulti(base, pkgnames)
+	errchan := DownloadMulti(base, ".", pkgnames)
 	for i := 0; i < len(pkgnames); i++ {
 		<-errchan
 	}
@@ -52,12 +50,10 @@ func TestDownloadSequential(t *testing.T) {
 
 	pkgnames := []string{
 		"acl-2.2.52-2-x86_64.pkg.tar.xz",
-		"attr-2.4.47-1-x86_64.pkg.tar.xz",
-		"bash-4.3.046-1-x86_64.pkg.tar.xz",
 		"automake-1.15-1-any.pkg.tar.xz"}
 
 	for _, pkgname := range pkgnames {
-		err := DownloadSingle(base, pkgname)
+		err := DownloadSingle(base, ".", pkgname)
 		if err != nil {
 			t.Errorf("Error: ", err)
 		}
