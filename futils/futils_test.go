@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"log/syslog"
 	"os"
-	"syslogger"
 	"testing"
 	"time"
+
+	"github.com/sonic/src/syslogger"
 )
 
 func TestDirList(t *testing.T) {
