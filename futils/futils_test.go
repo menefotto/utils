@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/sonic/src/syslogger"
+	"github.com/sonic/lib/syslogger"
 )
 
 func TestDirList(t *testing.T) {

@@ -1,6 +1,6 @@
 package futils
 
-import "github.com/sonic/src/syslogger"
+import "github.com/sonic/lib/syslogger"
 
 type FileMoverEntry struct {
 	Source, Destination string
