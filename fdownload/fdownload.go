@@ -10,7 +10,7 @@ package fdownload
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net"
 	"net/http"
 	"os"
@@ -40,7 +40,9 @@ func DownloadMulti(baseurl, saveto string, pkgs []string) chan error {
 
 func DownloadSingle(baseurl, saveto, pkgname string) error {
 	client := clientInit()
+
 	resp, err := client.Get(baseurl + pkgname)
+	defer resp.Body.Close()
 	if err != nil {
 		return err
 	}
@@ -49,19 +51,47 @@ func DownloadSingle(baseurl, saveto, pkgname string) error {
 		return fmt.Errorf(resp.Status)
 	}
 
-	data, err := ioutil.ReadAll(resp.Body)
-	defer resp.Body.Close()
+	f, err := os.Create(path.Join(saveto, pkgname))
 	if err != nil {
 		return err
 	}
+	defer f.Close()
 
-	var fmode os.FileMode = 0666
-	err = ioutil.WriteFile(path.Join(saveto, pkgname), data, fmode)
-	if err != nil {
-		return err
+	return copy(resp.Body, f, resp.ContentLength)
+}
+
+func copy(src io.Reader, dst io.Writer, srcsize int64) error {
+	var (
+		bufferSize int64 = 4096
+		totwrites  int64 = 0
+		totreads   int64 = 0
+	)
+
+	buffer := make([]byte, bufferSize)
+	body := io.LimitReader(src, srcsize)
+
+	for {
+		nreads, err := body.Read(buffer)
+		if nreads > 0 {
+			if err != nil && err != io.EOF {
+				return err
+			}
+
+			totreads += int64(nreads)
+
+			nwrite, err := dst.Write(buffer[:nreads])
+			if err != nil && err != io.EOF {
+				return err
+			}
+
+			totwrites += int64(nwrite)
+
+			if totreads == srcsize && totwrites == srcsize {
+				return nil
+			}
+		}
+
 	}
-
-	return nil
 }
 
 func clientInit() http.Client {

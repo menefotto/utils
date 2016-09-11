@@ -19,7 +19,7 @@ func TestSingleDownload(t *testing.T) {
 	pkgname := "acl-2.2.52-2-x86_64.pkg.tar.xz"
 	err := DownloadSingle(base, ".", pkgname)
 	if err != nil {
-		t.Errorf("Error: ", err)
+		t.Error(err)
 	}
 	os.Remove(base + pkgname)
 }
@@ -55,7 +55,7 @@ func TestDownloadSequential(t *testing.T) {
 	for _, pkgname := range pkgnames {
 		err := DownloadSingle(base, ".", pkgname)
 		if err != nil {
-			t.Errorf("Error: ", err)
+			t.Error(err)
 		}
 		os.Remove(pkgname)
 	}
