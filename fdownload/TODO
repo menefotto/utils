@@ -1,2 +1,1 @@
-expand the downloader library to and sync as well, and be more a general. More,
-tests and more comments as well.
+Fix random bugs slice out of range only when tests are not lauched from this directory.

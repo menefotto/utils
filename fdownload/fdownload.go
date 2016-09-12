@@ -101,8 +101,12 @@ func copy(src io.Reader, dst io.Writer, srcsize int64, pkgname string) error {
 func progressMsgBuild(msg string) string {
 	w, _ := termutils.GetDimensions()
 
-	if len(msg) > w-16 {
-		msg = msg[:w-19] + "..."
+	newmsg := make([]byte, 0)
+
+	if len(msg) > (w - 19) {
+		newmsg = append(newmsg, []byte(msg[:w-19])...)
+	} else {
+		newmsg = append([]byte(msg))
 	}
 
 	spacen := w - (len(msg) + 9)
@@ -112,7 +116,7 @@ func progressMsgBuild(msg string) string {
 		spaces = append(spaces, []byte(" ")...)
 	}
 
-	return msg + string(spaces)
+	return string(newmsg) + string(spaces)
 }
 
 func progressPrinter(msg string, tot, percent int64) {
