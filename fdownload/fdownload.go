@@ -122,8 +122,9 @@ func progressMsgBuild(msg string) string {
 func progressPrinter(msg string, tot, percent int64) {
 	if tot/percent == 100 {
 		fmt.Printf("%s%d%s\n", msg, 100, "%")
+	} else {
+		fmt.Printf("%s%d%s\r", msg, tot/percent, "%")
 	}
-	fmt.Printf("%s%d%s\r", msg, tot/percent, "%")
 }
 
 func clientInit() http.Client {
