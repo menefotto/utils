@@ -4,3 +4,4 @@ This directory includes various utilities:
 - xzutlis provides liblzma utilities.
 - tarutils provides tar archive utilities.
 - fdownload provides downloading utilities.
+- termutils provides terminal utilities.

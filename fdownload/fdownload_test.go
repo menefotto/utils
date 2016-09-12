@@ -16,7 +16,7 @@ func TestClietInit(t *testing.T) {
 
 func TestSingleDownload(t *testing.T) {
 	base := "http://archlinux.polymorf.fr/core/os/x86_64/"
-	pkgname := "acl-2.2.52-2-x86_64.pkg.tar.xz"
+	pkgname := "bash-4.3.046-1-x86_64.pkg.tar.xz"
 	err := DownloadSingle(base, ".", pkgname)
 	if err != nil {
 		t.Error(err)

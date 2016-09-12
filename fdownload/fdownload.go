@@ -63,12 +63,13 @@ func DownloadSingle(baseurl, saveto, pkgname string) error {
 func copy(src io.Reader, dst io.Writer, srcsize int64) error {
 	var (
 		bufferSize int64 = 4096
-		totwrites  int64 = 0
-		totreads   int64 = 0
+		total      int64 = 0
 	)
 
 	buffer := make([]byte, bufferSize)
 	body := io.LimitReader(src, srcsize)
+
+	percent := srcsize / 100
 
 	for {
 		nreads, err := body.Read(buffer)
@@ -77,21 +78,28 @@ func copy(src io.Reader, dst io.Writer, srcsize int64) error {
 				return err
 			}
 
-			totreads += int64(nreads)
+			total += int64(nreads)
 
-			nwrite, err := dst.Write(buffer[:nreads])
+			_, err = dst.Write(buffer[:nreads])
 			if err != nil && err != io.EOF {
 				return err
 			}
 
-			totwrites += int64(nwrite)
+			progressPrinter("Downloading : ", total, percent)
 
-			if totreads == srcsize && totwrites == srcsize {
+			if total == srcsize {
 				return nil
 			}
 		}
 
 	}
+}
+
+func progressPrinter(msg string, tot, percent int64) {
+	if tot/percent == 100 {
+		fmt.Println(msg+"%", 100)
+	}
+	fmt.Printf("%s %d%s\r", msg, tot/percent, "%")
 }
 
 func clientInit() http.Client {
