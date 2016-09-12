@@ -17,6 +17,8 @@ import (
 	"path"
 	"sync"
 	"time"
+
+	"github.com/sonic/lib/utils/termutils"
 )
 
 func DownloadMulti(baseurl, saveto string, pkgs []string) chan error {
@@ -57,10 +59,10 @@ func DownloadSingle(baseurl, saveto, pkgname string) error {
 	}
 	defer f.Close()
 
-	return copy(resp.Body, f, resp.ContentLength)
+	return copy(resp.Body, f, resp.ContentLength, pkgname)
 }
 
-func copy(src io.Reader, dst io.Writer, srcsize int64) error {
+func copy(src io.Reader, dst io.Writer, srcsize int64, pkgname string) error {
 	var (
 		bufferSize int64 = 4096
 		total      int64 = 0
@@ -70,6 +72,7 @@ func copy(src io.Reader, dst io.Writer, srcsize int64) error {
 	body := io.LimitReader(src, srcsize)
 
 	percent := srcsize / 100
+	message := progressMsgBuild("Downloading " + pkgname)
 
 	for {
 		nreads, err := body.Read(buffer)
@@ -85,7 +88,7 @@ func copy(src io.Reader, dst io.Writer, srcsize int64) error {
 				return err
 			}
 
-			progressPrinter("Downloading : ", total, percent)
+			progressPrinter(message, total, percent)
 
 			if total == srcsize {
 				return nil
@@ -95,11 +98,28 @@ func copy(src io.Reader, dst io.Writer, srcsize int64) error {
 	}
 }
 
+func progressMsgBuild(msg string) string {
+	w, _ := termutils.GetDimensions()
+
+	if len(msg) > w-16 {
+		msg = msg[:w-19] + "..."
+	}
+
+	spacen := w - (len(msg) + 9)
+	spaces := []byte(" ")
+
+	for i := 0; i < spacen; i++ {
+		spaces = append(spaces, []byte(" ")...)
+	}
+
+	return msg + string(spaces)
+}
+
 func progressPrinter(msg string, tot, percent int64) {
 	if tot/percent == 100 {
-		fmt.Println(msg+"%", 100)
+		fmt.Printf("%s%d%s\n", msg, 100, "%")
 	}
-	fmt.Printf("%s %d%s\r", msg, tot/percent, "%")
+	fmt.Printf("%s%d%s\r", msg, tot/percent, "%")
 }
 
 func clientInit() http.Client {

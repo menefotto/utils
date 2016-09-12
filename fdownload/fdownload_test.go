@@ -21,7 +21,7 @@ func TestSingleDownload(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	os.Remove(base + pkgname)
+	os.Remove(pkgname)
 }
 
 func TestDownloadMulti(t *testing.T) {

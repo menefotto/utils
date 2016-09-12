@@ -6,7 +6,7 @@ import (
 	"unsafe"
 )
 
-func GetTermDimensions() (int, int) {
+func GetDimensions() (int, int) {
 	fd := os.Stdout.Fd()
 
 	var sz winsize
