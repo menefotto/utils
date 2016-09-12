@@ -5,3 +5,4 @@ This directory includes various utilities:
 - tarutils provides tar archive utilities.
 - fdownload provides downloading utilities.
 - termutils provides terminal utilities.
+- cryptoutils provides crypto utilities.
