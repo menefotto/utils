@@ -12,6 +12,8 @@ import (
 	"path"
 	"sort"
 	"strings"
+
+	"github.com/errors"
 )
 
 func DirList(dirname string) ([]string, error) {
@@ -19,7 +21,7 @@ func DirList(dirname string) ([]string, error) {
 
 	files, err := ioutil.ReadDir(dirname)
 	if err != nil {
-		return filelist, err
+		return filelist, errors.Wrap(err)()
 	}
 
 	for _, file := range files {
@@ -47,19 +49,19 @@ func WriteFileOrDir(name string, data []byte, mode os.FileMode) error {
 func CopyFile(source, destination string) error {
 	from, err := os.Open(source)
 	if err != nil {
-		return err
+		return errors.Wrap(err)()
 	}
 	defer from.Close()
 
 	info, err := from.Stat()
 	if err != nil {
-		return err
+		return errors.Wrap(err)()
 	}
 
 	content := make([]byte, info.Size())
 	_, err = from.Read(content)
 	if err != nil {
-		return err
+		return errors.Wrap(err)()
 	}
 
 	return ioutil.WriteFile(destination, content, info.Mode())
@@ -68,12 +70,12 @@ func CopyFile(source, destination string) error {
 func MoveFile(source, destination string) error {
 	err := CopyFile(source, destination)
 	if err != nil {
-		return err
+		return errors.Wrap(err)()
 	}
 
 	err = os.Remove(source)
 	if err != nil {
-		return err
+		return errors.Wrap(err)()
 	}
 	return nil
 }

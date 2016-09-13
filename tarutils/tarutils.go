@@ -3,9 +3,10 @@ package tarutils
 import (
 	"archive/tar"
 	"bytes"
-	"errors"
 	"io"
 	"os"
+
+	"github.com/sonic/lib/errors"
 )
 
 var ErrNotTarFile = errors.New("This is not a valid tar archive")
@@ -13,7 +14,7 @@ var ErrNotTarFile = errors.New("This is not a valid tar archive")
 func IsTarFile(filename string) (bool, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		return false, err
+		return false, errors.Wrap(err)()
 	}
 	defer file.Close()
 
@@ -33,7 +34,7 @@ type TarEntry struct {
 func FileExtractor(filename string) (map[string]*TarEntry, error) {
 	file, err := os.Open(filename)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err)()
 	}
 	defer file.Close()
 
@@ -56,13 +57,13 @@ func extractor(reader io.Reader) (map[string]*TarEntry, error) {
 			break
 		}
 		if err != io.EOF && err != nil {
-			return nil, err
+			return nil, errors.Wrap(err)()
 		}
 
 		content := make([]byte, header.Size)
 		_, err = ar.Read(content)
 		if err != io.EOF && err != nil {
-			return nil, err
+			return nil, errors.Wrap(err)()
 		}
 
 		data[header.Name] = &TarEntry{Data: content, Mode: header.FileInfo().Mode()}

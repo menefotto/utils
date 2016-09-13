@@ -18,6 +18,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sonic/lib/errors"
 	"github.com/sonic/lib/utils/miscutils"
 )
 
@@ -48,7 +49,7 @@ func DownloadSingle(baseurl, saveto, pkgname string) error {
 	resp, err := client.Get(baseurl + pkgname)
 	defer resp.Body.Close()
 	if err != nil {
-		return err
+		return errors.Wrap(err)()
 	}
 
 	if resp.StatusCode != http.StatusOK {
@@ -57,7 +58,7 @@ func DownloadSingle(baseurl, saveto, pkgname string) error {
 
 	f, err := os.Create(path.Join(saveto, pkgname))
 	if err != nil {
-		return err
+		return errors.Wrap(err)()
 	}
 	defer f.Close()
 
@@ -79,14 +80,14 @@ func copy(src io.Reader, dst io.Writer, srcsize int64, pkgname string) error {
 		nreads, err := body.Read(buffer)
 		if nreads > 0 {
 			if err != nil && err != io.EOF {
-				return err
+				return errors.Wrap(err)()
 			}
 
 			total += int64(nreads)
 
 			_, err = dst.Write(buffer[:nreads])
 			if err != nil && err != io.EOF {
-				return err
+				return errors.Wrap(err)()
 			}
 
 			if !Silent {

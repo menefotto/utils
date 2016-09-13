@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/errors"
 	xz "github.com/remyoudompheng/go-liblzma"
 )
 
@@ -20,18 +21,18 @@ func Decompress(data interface{}) ([]byte, error) {
 
 	decompressed, err := xz.NewReader(inbuffer)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err)()
 	}
 
 	outbuffer := new(bytes.Buffer)
 	_, err = io.Copy(outbuffer, decompressed)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err)()
 	}
 
 	err = decompressed.Close()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err)()
 	}
 
 	return outbuffer.Bytes(), nil
@@ -55,23 +56,23 @@ func Compress(data interface{}) ([]byte, error) {
 
 	compressor, err := xz.NewWriter(&buffer, xz.LevelDefault)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err)()
 	}
 
 	switch data.(type) {
 	case string:
 		if _, err := compressor.Write([]byte(data.(string))); err != nil {
-			return nil, err
+			return nil, errors.Wrap(err)()
 		}
 	case []byte:
 		if _, err := compressor.Write(data.([]byte)); err != nil {
-			return nil, err
+			return nil, errors.Wrap(err)()
 		}
 	}
 
 	err = compressor.Close()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err)()
 	}
 
 	return buffer.Bytes(), nil
@@ -90,13 +91,13 @@ func FileCompress(filein, fileout string) error {
 
 	fout, err := os.Create(fileout)
 	if err != nil {
-		return err
+		return errors.Wrap(err)()
 	}
 	defer fout.Close()
 
 	_, err = fout.Write(compressed)
 	if err != nil && err != io.EOF {
-		return err
+		return errors.Wrap(err)()
 	}
 
 	return nil
@@ -105,19 +106,19 @@ func FileCompress(filein, fileout string) error {
 func openAndRead(filename string) ([]byte, error) {
 	f, err := os.Open(filename)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err)()
 	}
 	defer f.Close()
 
 	fstat, err := f.Stat()
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err)()
 	}
 
 	data := make([]byte, fstat.Size())
 	_, err = f.Read(data)
 	if err != nil && err != io.EOF {
-		return nil, err
+		return nil, errors.Wrap(err)()
 	}
 
 	return data, nil
