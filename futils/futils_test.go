@@ -61,7 +61,7 @@ func TestMoveFile(t *testing.T) {
 
 func TestFileMover(t *testing.T) {
 	s := "/tmp/"
-	d := "/var/cache/sonic/pkgs/"
+	d := "/var/cache/pacman/pkg/"
 	filename := "tar-1.29-1-x86_64.pkg.tar.xz"
 
 	err := CopyFile(d+filename, s+filename)
@@ -73,4 +73,38 @@ func TestFileMover(t *testing.T) {
 	mover.Send(s+filename, d+filename)
 	time.Sleep(time.Second * 2)
 	mover.Close()
+}
+
+func TestFileMoverManyMoreThen32(t *testing.T) {
+	s := "/tmp/"
+	d := "/var/cache/pacman/pkg/"
+	filename := "tar-1.29-1-x86_64.pkg.tar.xz"
+
+	err := CopyFile(d+filename, s+filename)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	mover := NewFileMover(syslogger.NewLogger("testmover", syslog.LOG_ERR))
+	for i := 35; i > 0; i-- {
+		mover.Send(s+filename, d+filename)
+	}
+	time.Sleep(time.Second * 0)
+	mover.Close()
+}
+
+func TestUniquePath(t *testing.T) {
+	slice := []string{"/usr/test/", "/usr/test"}
+	res := UniquePaths(slice)
+	if len(res) != 1 {
+		t.Error("shuold be only one path")
+	}
+
+}
+
+func TestIsRootUser(t *testing.T) {
+	yes := IsRootUser()
+	if yes {
+		t.Error("should not be root user")
+	}
 }

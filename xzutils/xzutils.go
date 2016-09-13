@@ -38,20 +38,8 @@ func Decompress(data interface{}) ([]byte, error) {
 }
 
 func FileDecompress(filename string) ([]byte, error) {
-	f, err := os.Open(filename)
+	data, err := openAndRead(filename)
 	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-
-	fstat, err := f.Stat()
-	if err != nil {
-		return nil, err
-	}
-
-	data := make([]byte, fstat.Size())
-	_, err = f.Read(data)
-	if err != nil && err != io.EOF {
 		return nil, err
 	}
 
@@ -90,20 +78,8 @@ func Compress(data interface{}) ([]byte, error) {
 }
 
 func FileCompress(filein, fileout string) error {
-	fin, err := os.Open(filein)
+	data, err := openAndRead(filein)
 	if err != nil {
-		return err
-	}
-	defer fin.Close()
-
-	fstat, err := fin.Stat()
-	if err != nil {
-		return err
-	}
-
-	data := make([]byte, fstat.Size())
-	_, err = fin.Read(data)
-	if err != nil && err != io.EOF {
 		return err
 	}
 
@@ -124,4 +100,26 @@ func FileCompress(filein, fileout string) error {
 	}
 
 	return nil
+}
+
+func openAndRead(filename string) ([]byte, error) {
+	f, err := os.Open(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+
+	fstat, err := f.Stat()
+	if err != nil {
+		return nil, err
+	}
+
+	data := make([]byte, fstat.Size())
+	_, err = f.Read(data)
+	if err != nil && err != io.EOF {
+		return nil, err
+	}
+
+	return data, nil
+
 }

@@ -12,13 +12,13 @@ func FileSha256Sum(filename string) (string, error) {
 
 	f, err := os.Open(filename)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 	defer f.Close()
 
 	content, err := ioutil.ReadAll(f)
 	if err != nil {
-		return "", nil
+		return "", err
 
 	}
 

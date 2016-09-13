@@ -21,6 +21,8 @@ import (
 	"github.com/sonic/lib/utils/termutils"
 )
 
+var Silent bool = false
+
 func DownloadMulti(baseurl, saveto string, pkgs []string) chan error {
 	errchan := make(chan error)
 	var wg sync.WaitGroup
@@ -72,7 +74,6 @@ func copy(src io.Reader, dst io.Writer, srcsize int64, pkgname string) error {
 	body := io.LimitReader(src, srcsize)
 
 	percent := srcsize / 100
-	message := progressMsgBuild("Downloading " + pkgname)
 
 	for {
 		nreads, err := body.Read(buffer)
@@ -88,7 +89,10 @@ func copy(src io.Reader, dst io.Writer, srcsize int64, pkgname string) error {
 				return err
 			}
 
-			progressPrinter(message, total, percent)
+			if !Silent {
+				message := progressMsgBuild("Downloading " + pkgname)
+				progressPrinter(message, total, percent)
+			}
 
 			if total == srcsize {
 				return nil
@@ -101,12 +105,13 @@ func copy(src io.Reader, dst io.Writer, srcsize int64, pkgname string) error {
 func progressMsgBuild(msg string) string {
 	w, _ := termutils.GetDimensions()
 
-	newmsg := make([]byte, 0)
+	var newmsg []byte
 
-	if len(msg) > (w - 19) {
-		newmsg = append(newmsg, []byte(msg[:w-19])...)
-	} else {
-		newmsg = append([]byte(msg))
+	switch {
+	case len(msg) > (w - 19):
+		newmsg = []byte(msg)[:w-19]
+	case len(msg) < (w - 19):
+		newmsg = []byte(msg)
 	}
 
 	spacen := w - (len(msg) + 9)
@@ -121,9 +126,9 @@ func progressMsgBuild(msg string) string {
 
 func progressPrinter(msg string, tot, percent int64) {
 	if tot/percent == 100 {
-		fmt.Printf("%s%d%s\n", msg, 100, "%")
+		fmt.Fprintf(os.Stdout, "%s%d%s\n", msg, 100, "%")
 	} else {
-		fmt.Printf("%s%d%s\r", msg, tot/percent, "%")
+		fmt.Fprintf(os.Stdout, "%s%d%s\r", msg, tot/percent, "%")
 	}
 }
 
