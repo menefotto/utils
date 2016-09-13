@@ -31,7 +31,7 @@ func FileSha256Sum(filename string) (string, error) {
 func VerifySha256(sha, filename string) (bool, error) {
 	newsha, err := FileSha256Sum(filename)
 	if err != nil {
-		return false, errros.Wrap(err)()
+		return false, errors.Wrap(err)()
 	}
 
 	return newsha == sha, nil
@@ -57,7 +57,7 @@ func FileMd5Sum(filename string) (string, error) {
 func VerifyMd5(md5, filename string) (bool, error) {
 	newmd5, err := FileMd5Sum(filename)
 	if err != nil {
-		return false, errors.Wrap(err)
+		return false, errors.Wrap(err)()
 	}
 
 	return newmd5 == md5, nil
