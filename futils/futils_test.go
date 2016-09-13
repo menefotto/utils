@@ -101,10 +101,3 @@ func TestUniquePath(t *testing.T) {
 	}
 
 }
-
-func TestIsRootUser(t *testing.T) {
-	yes := IsRootUser()
-	if yes {
-		t.Error("should not be root user")
-	}
-}

@@ -3,8 +3,6 @@ package fdownload
 import (
 	"os"
 	"testing"
-
-	"github.com/sonic/lib/utils/termutils"
 )
 
 func TestClietInit(t *testing.T) {
@@ -95,13 +93,4 @@ func TestDownloadSequential(t *testing.T) {
 		os.Remove(pkgname)
 	}
 
-}
-
-func TestMsgBuildLong(t *testing.T) {
-	msg := "fal;hkfl;ashdfl;hasdl;fhl;asdhfl;hsadl;kfhlksadhlkfsdahl;fkla;sflk;sdhl;khjfdafkljadfjadfadljflaksjfldksa"
-	cutmsg := progressMsgBuild(msg)
-	w, _ := termutils.GetDimensions()
-	if len(cutmsg) > w {
-		t.Error("msg string has not been cut to fit terminal")
-	}
 }

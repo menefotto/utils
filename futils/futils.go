@@ -78,13 +78,6 @@ func MoveFile(source, destination string) error {
 	return nil
 }
 
-func IsRootUser() bool {
-	if os.Geteuid() != 0 {
-		return false
-	}
-	return true
-}
-
 func UniquePaths(paths []string) map[string]bool {
 	sort.Strings(paths)
 
