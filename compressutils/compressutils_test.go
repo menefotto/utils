@@ -1,4 +1,4 @@
-package xzutils
+package compressutils
 
 import (
 	"os"

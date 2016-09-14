@@ -1,15 +1,16 @@
-package xzutils
+package compressutils
 
 import (
 	"bytes"
 	"io"
 	"os"
 
-	"github.com/errors"
+	"github.com/golang/snappy"
 	xz "github.com/remyoudompheng/go-liblzma"
+	"github.com/sonic/lib/errors"
 )
 
-func Decompress(data interface{}) ([]byte, error) {
+func XzDecompress(data interface{}) ([]byte, error) {
 	var inbuffer *bytes.Buffer
 
 	switch data.(type) {
@@ -38,7 +39,7 @@ func Decompress(data interface{}) ([]byte, error) {
 	return outbuffer.Bytes(), nil
 }
 
-func FileDecompress(filename string) ([]byte, error) {
+func XzFileDecompress(filename string) ([]byte, error) {
 	data, err := openAndRead(filename)
 	if err != nil {
 		return nil, err
@@ -51,7 +52,7 @@ func FileDecompress(filename string) ([]byte, error) {
 	return bytes, nil
 }
 
-func Compress(data interface{}) ([]byte, error) {
+func XzCompress(data interface{}) ([]byte, error) {
 	var buffer bytes.Buffer
 
 	compressor, err := xz.NewWriter(&buffer, xz.LevelDefault)
@@ -78,7 +79,7 @@ func Compress(data interface{}) ([]byte, error) {
 	return buffer.Bytes(), nil
 }
 
-func FileCompress(filein, fileout string) error {
+func XzFileCompress(filein, fileout string) error {
 	data, err := openAndRead(filein)
 	if err != nil {
 		return err
@@ -123,4 +124,16 @@ func openAndRead(filename string) ([]byte, error) {
 
 	return data, nil
 
+}
+
+func SnappyCompress(src []byte) []byte {
+	return snappy.Encode([]byte(""), src)
+}
+
+func SnappyDecompress(src []byte) ([]byte, error) {
+	blob, err := snappy.Decode([]byte(""), src)
+	if err != nil {
+		return nil, errors.Wrap(err)()
+	}
+	return blob, nil
 }
