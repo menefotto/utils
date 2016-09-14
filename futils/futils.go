@@ -13,7 +13,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/errors"
+	"github.com/sonic/lib/errors"
 )
 
 func DirList(dirname string) ([]string, error) {

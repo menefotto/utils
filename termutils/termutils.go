@@ -7,11 +7,16 @@ import (
 )
 
 func GetDimensions() (int, int) {
-	fd := os.Stdout.Fd()
+	out, err := os.OpenFile("/dev/tty", syscall.O_WRONLY, 0)
+	if err != nil {
+		return 0, 0
+	}
+	defer out.Close()
 
 	var sz winsize
 	_, _, _ = syscall.Syscall(syscall.SYS_IOCTL,
-		fd, uintptr(syscall.TIOCGWINSZ), uintptr(unsafe.Pointer(&sz)))
+		out.Fd(), uintptr(syscall.TIOCGWINSZ), uintptr(unsafe.Pointer(&sz)))
+
 	return int(sz.cols), int(sz.rows)
 }
 

@@ -45,7 +45,7 @@ func XzFileDecompress(filename string) ([]byte, error) {
 		return nil, err
 	}
 
-	bytes, err := Decompress(data)
+	bytes, err := XzDecompress(data)
 	if err != nil {
 		return nil, err
 	}
@@ -85,7 +85,7 @@ func XzFileCompress(filein, fileout string) error {
 		return err
 	}
 
-	compressed, err := Compress(data)
+	compressed, err := XzCompress(data)
 	if err != nil {
 		return err
 	}

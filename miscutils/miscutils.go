@@ -12,10 +12,10 @@ func ProgressMsgBuild(msg string) string {
 
 	var newmsg []byte
 
-	switch {
-	case len(msg) > (w - 19):
+	if len(msg) > (w - 19) {
 		newmsg = []byte(msg)[:w-19]
-	case len(msg) < (w - 19):
+	}
+	if len(msg) < (w - 19) {
 		newmsg = []byte(msg)
 	}
 

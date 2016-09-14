@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestFileCompressionByte(t *testing.T) {
+func TestXzFileDecompressionByte(t *testing.T) {
 	f, err := os.Open("test.txt")
 	if err != nil {
 		t.Fatal(err)
@@ -21,7 +21,7 @@ func TestFileCompressionByte(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := Compress(dat)
+	data, err := XzCompress(dat)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -30,7 +30,7 @@ func TestFileCompressionByte(t *testing.T) {
 		t.Fatal("Size must be equal to 772, instead was: ", len(data))
 	}
 }
-func TestFileCompressionWrong(t *testing.T) {
+func TestXzFileDecompressionWrong(t *testing.T) {
 	f, err := os.Open("malformed.txt.xz")
 	if err != nil {
 		t.Fatal(err)
@@ -46,7 +46,7 @@ func TestFileCompressionWrong(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := Compress(dat)
+	data, err := XzCompress(dat)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -56,7 +56,7 @@ func TestFileCompressionWrong(t *testing.T) {
 	}
 }
 
-func TestFileCompressionNoEsist(t *testing.T) {
+func TestXzFileDecompressionNoEsist(t *testing.T) {
 	f, err := os.Open("nofilehere.txt")
 	if err == nil {
 		t.Fatal(err)
@@ -75,7 +75,7 @@ func TestFileCompressionNoEsist(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := Compress(dat)
+	data, err := XzCompress(dat)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -84,7 +84,7 @@ func TestFileCompressionNoEsist(t *testing.T) {
 		t.Fatal("Size must be equal to 772, instead was: ", len(data))
 	}
 }
-func TestFileCompressionString(t *testing.T) {
+func TestXzFileDecompressionString(t *testing.T) {
 	f, err := os.Open("test.txt")
 	if err != nil {
 		t.Fatal(err)
@@ -100,7 +100,7 @@ func TestFileCompressionString(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := Compress(string(dat))
+	data, err := XzCompress(string(dat))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -110,7 +110,7 @@ func TestFileCompressionString(t *testing.T) {
 	}
 }
 
-func TestXzDecompressBytes(t *testing.T) {
+func TestXzDeXzCompressBytes(t *testing.T) {
 	f, err := os.Open("test.txt.xz")
 	if err != nil {
 		t.Error(err)
@@ -127,7 +127,7 @@ func TestXzDecompressBytes(t *testing.T) {
 		t.Error(err)
 	}
 
-	b, err := Decompress(data)
+	b, err := XzDecompress(data)
 	if err != nil {
 		t.Log(err)
 	}
@@ -137,7 +137,7 @@ func TestXzDecompressBytes(t *testing.T) {
 	}
 }
 
-func TestXzDecompressBytesMalformed(t *testing.T) {
+func TestXzDeXzCompressBytesMalformed(t *testing.T) {
 	f, err := os.Open("malformed.txt.xz")
 	if err != nil {
 		t.Error(err)
@@ -154,7 +154,7 @@ func TestXzDecompressBytesMalformed(t *testing.T) {
 		t.Error(err)
 	}
 
-	b, err := Decompress(data)
+	b, err := XzDecompress(data)
 	if err == nil {
 		t.Log(err)
 	}
@@ -163,7 +163,7 @@ func TestXzDecompressBytesMalformed(t *testing.T) {
 		t.Fatalf("Size should have been 1204 instead is: ", len(b))
 	}
 }
-func TestXzDecompressNoFile(t *testing.T) {
+func TestXzDeXzCompressNoFile(t *testing.T) {
 	f, err := os.Open("")
 	if err == nil {
 		t.Fatal(err)
@@ -183,7 +183,7 @@ func TestXzDecompressNoFile(t *testing.T) {
 		t.Error(err)
 	}
 
-	b, err := Decompress(data)
+	b, err := XzDecompress(data)
 	if err != nil {
 		t.Log(err)
 	}
@@ -193,15 +193,15 @@ func TestXzDecompressNoFile(t *testing.T) {
 	}
 }
 
-func TestDecompressWrongInvalidInput(t *testing.T) {
+func TestDeXzCompressWrongInvalidInput(t *testing.T) {
 	data := ""
-	_, err := Decompress(data)
+	_, err := XzCompress(data)
 	if err == nil {
 		t.Log(err)
 	}
 
 }
-func TestXzDecompressString(t *testing.T) {
+func TestXzDeXzCompressString(t *testing.T) {
 	f, err := os.Open("test.txt.xz")
 	if err != nil {
 		t.Error(err)
@@ -218,7 +218,7 @@ func TestXzDecompressString(t *testing.T) {
 		t.Error(err)
 	}
 
-	b, err := Decompress(string(data))
+	b, err := XzDecompress(string(data))
 	if err != nil {
 		t.Log(err)
 	}
@@ -228,19 +228,19 @@ func TestXzDecompressString(t *testing.T) {
 	}
 }
 
-func TestFileXzDecompress(t *testing.T) {
-	data, err := FileDecompress("test.txt.xz")
+func TestFileXzDeXzCompress(t *testing.T) {
+	data, err := XzFileDecompress("test.txt.xz")
 	if err != nil {
 		t.Fatal(err)
 	}
 
 	if len(data) != 1203 {
-		t.Fatal("Decompression went wrong, size is: ", len(data))
+		t.Fatal("DeXzCompression went wrong, size is: ", len(data))
 	}
 }
 
-func TestFileXzCompress(t *testing.T) {
-	err := FileCompress("test.txt", "test.xz")
+func TestFileXzXzCompress(t *testing.T) {
+	err := XzFileCompress("test.txt", "test.xz")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -251,14 +251,14 @@ func TestFileXzCompress(t *testing.T) {
 	}
 
 	if info.Size() != int64(772) {
-		t.Fatal("Compression went wrong, size missmatch: ", info.Size())
+		t.Fatal("XzCompression went wrong, size missmatch: ", info.Size())
 	}
 
 	os.Remove("test.xz")
 }
 
-func TestFileXzCompressWrong(t *testing.T) {
-	err := FileCompress("test.txt", "/var/cache/test.xz")
+func TestFileXzXzCompressWrong(t *testing.T) {
+	err := XzFileCompress("test.txt", "/var/cache/test.xz")
 	if err == nil {
 		t.Fatal(err)
 	}
@@ -270,8 +270,8 @@ func TestFileXzCompressWrong(t *testing.T) {
 
 }
 
-func TestFileXzCompressWrongInput(t *testing.T) {
-	err := FileCompress("boh", "test.xz")
+func TestFileXzXzCompressWrongInput(t *testing.T) {
+	err := XzFileCompress("boh", "test.xz")
 	if err == nil {
 		t.Fatal(err)
 	}
