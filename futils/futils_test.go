@@ -69,7 +69,7 @@ func TestFileMover(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	mover := NewFileMover(syslogger.NewLogger("testmover", syslog.LOG_ERR))
+	mover := NewFileMover(syslogger.New("testmover", syslog.LOG_ERR))
 	mover.Send(s+filename, d+filename)
 	time.Sleep(time.Second * 2)
 	mover.Close()
@@ -85,7 +85,7 @@ func TestFileMoverManyMoreThen32(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	mover := NewFileMover(syslogger.NewLogger("testmover", syslog.LOG_ERR))
+	mover := NewFileMover(syslogger.New("testmover", syslog.LOG_ERR))
 	for i := 35; i > 0; i-- {
 		mover.Send(s+filename, d+filename)
 	}
