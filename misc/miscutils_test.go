@@ -1,15 +1,15 @@
-package miscutils
+package misc
 
 import (
 	"testing"
 
-	"github.com/sonic/lib/utils/termutils"
+	"github.com/sonic/lib/utils/terminal"
 )
 
 func TestMsgBuildLong(t *testing.T) {
 	msg := "fal;hkfl;ashdfl;hasdl;fhl;asdhfl;hsadl;kfhlksadhlkfsdahl;fkla;sflk;sdhl;khjfdafkljadfjadfadljflaksjfldksa"
 	cutmsg := ProgressMsgBuild(msg)
-	w, _ := termutils.GetDimensions()
+	w, _ := terminal.GetDimensions()
 	if len(cutmsg) > w {
 		t.Error("msg string has not been cut to fit terminal")
 	}

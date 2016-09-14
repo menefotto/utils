@@ -1,4 +1,4 @@
-package tarutils
+package tar
 
 import (
 	"os"

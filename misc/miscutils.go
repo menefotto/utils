@@ -1,14 +1,14 @@
-package miscutils
+package misc
 
 import (
 	"fmt"
 	"os"
 
-	"github.com/sonic/lib/utils/termutils"
+	"github.com/sonic/lib/utils/terminal"
 )
 
 func ProgressMsgBuild(msg string) string {
-	w, _ := termutils.GetDimensions()
+	w, _ := terminal.GetDimensions()
 
 	var newmsg []byte
 

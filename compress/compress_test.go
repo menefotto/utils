@@ -1,4 +1,4 @@
-package compressutils
+package compress
 
 import (
 	"os"

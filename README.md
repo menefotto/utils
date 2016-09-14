@@ -1,9 +1,9 @@
 This directory includes various utilities:
 
 - futils provides file utilities
-- compressutlis provides liblzma utilities.
-- tarutils provides tar archive utilities.
-- fdownload provides downloading utilities.
-- termutils provides terminal utilities.
-- cryptoutils provides crypto utilities.
+- compress provides liblzma utilities.
+- tar provides tar archive utilities.
+- download provides downloading utilities.
+- terminal provides terminal utilities.
+- crypto provides crypto utilities.
 

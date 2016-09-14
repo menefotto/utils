@@ -6,7 +6,7 @@
 // new goroutune and returns channel of errors if any
 // otherwise nil is returned in case of success (non error)
 
-package fdownload
+package download
 
 import (
 	"fmt"
@@ -19,19 +19,19 @@ import (
 	"time"
 
 	"github.com/sonic/lib/errors"
-	"github.com/sonic/lib/utils/miscutils"
+	"github.com/sonic/lib/utils/misc"
 )
 
 var Silent bool = false
 
-func DownloadMulti(baseurl, saveto string, pkgs []string) chan error {
+func Multi(baseurl, saveto string, pkgs []string) chan error {
 	errchan := make(chan error)
 	var wg sync.WaitGroup
 
 	for _, pkg := range pkgs {
 		wg.Add(1)
 		go func(baseurl, pkgname string, wg sync.WaitGroup) {
-			err := DownloadSingle(baseurl, saveto, pkgname)
+			err := Single(baseurl, saveto, pkgname)
 			if err != nil {
 				errchan <- fmt.Errorf("name: %v,%v\n", pkg, err)
 			} else {
@@ -43,7 +43,7 @@ func DownloadMulti(baseurl, saveto string, pkgs []string) chan error {
 	return errchan
 }
 
-func DownloadSingle(baseurl, saveto, pkgname string) error {
+func Single(baseurl, saveto, pkgname string) error {
 	client := clientInit()
 
 	resp, err := client.Get(baseurl + pkgname)
@@ -91,8 +91,8 @@ func copy(src io.Reader, dst io.Writer, srcsize int64, pkgname string) error {
 			}
 
 			if !Silent {
-				message := miscutils.ProgressMsgBuild("Downloading " + pkgname)
-				miscutils.ProgressPrinter(message, total, percent)
+				message := misc.ProgressMsgBuild("Downloading " + pkgname)
+				misc.ProgressPrinter(message, total, percent)
 			}
 
 			if total == srcsize {

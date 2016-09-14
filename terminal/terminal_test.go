@@ -1,4 +1,4 @@
-package termutils
+package terminal
 
 import "testing"
 

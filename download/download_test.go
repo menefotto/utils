@@ -1,4 +1,4 @@
-package fdownload
+package download
 
 import (
 	"os"
@@ -25,7 +25,7 @@ func TestClietInitWrong(t *testing.T) {
 func TestSingleDownload(t *testing.T) {
 	base := "http://archlinux.polymorf.fr/core/os/x86_64/"
 	pkgname := "bash-4.3.046-1-x86_64.pkg.tar.xz"
-	err := DownloadSingle(base, ".", pkgname)
+	err := Single(base, ".", pkgname)
 	if err != nil {
 		t.Error(err)
 	}
@@ -34,13 +34,13 @@ func TestSingleDownload(t *testing.T) {
 func TestSingleDownloadWrong(t *testing.T) {
 	base := "http://archlinux.fr/core/os/x86_64/"
 	pkgname := "bash-4.3.046-1-x86_64.pkg.tar.xz"
-	err := DownloadSingle(base, ".", pkgname)
+	err := Single(base, ".", pkgname)
 	if err == nil {
 		t.Error("Should not be nil")
 	}
 }
 
-func TestDownloadMulti(t *testing.T) {
+func TestMulti(t *testing.T) {
 	base := "http://archlinux.polymorf.fr/core/os/x86_64/"
 
 	pkgnames := []string{
@@ -48,7 +48,7 @@ func TestDownloadMulti(t *testing.T) {
 		"bash-4.3.046-1-x86_64.pkg.tar.xz",
 	}
 
-	errchan := DownloadMulti(base, ".", pkgnames)
+	errchan := Multi(base, ".", pkgnames)
 	for i := 0; i < len(pkgnames); i++ {
 		<-errchan
 	}
@@ -60,7 +60,7 @@ func TestDownloadMulti(t *testing.T) {
 		}
 	}
 }
-func TestDownloadMultiWrong(t *testing.T) {
+func TestMultiWrong(t *testing.T) {
 	base := "http://archlinux.polymorf.fr/core/os/x86_64/"
 
 	pkgnames := []string{
@@ -68,7 +68,7 @@ func TestDownloadMultiWrong(t *testing.T) {
 		"bass-4.3.046-1-x86_64.pkg.tar.xz",
 	}
 
-	errchan := DownloadMulti(base, ".", pkgnames)
+	errchan := Multi(base, ".", pkgnames)
 	for i := 0; i < len(pkgnames); i++ {
 		msg := <-errchan
 		if msg == nil {
@@ -86,7 +86,7 @@ func TestDownloadSequential(t *testing.T) {
 	}
 
 	for _, pkgname := range pkgnames {
-		err := DownloadSingle(base, ".", pkgname)
+		err := Single(base, ".", pkgname)
 		if err != nil {
 			t.Error(err)
 		}
