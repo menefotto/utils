@@ -52,7 +52,7 @@ func XzFileDecompress(filename string) ([]byte, error) {
 	return bytes, nil
 }
 
-func XzCompress(data interface{}) ([]byte, error) {
+func Xz(data interface{}) ([]byte, error) {
 	var buffer bytes.Buffer
 
 	compressor, err := xz.NewWriter(&buffer, xz.LevelDefault)
@@ -79,13 +79,13 @@ func XzCompress(data interface{}) ([]byte, error) {
 	return buffer.Bytes(), nil
 }
 
-func XzFileCompress(filein, fileout string) error {
+func XzFile(filein, fileout string) error {
 	data, err := openAndRead(filein)
 	if err != nil {
 		return err
 	}
 
-	compressed, err := XzCompress(data)
+	compressed, err := Xz(data)
 	if err != nil {
 		return err
 	}
@@ -126,7 +126,7 @@ func openAndRead(filename string) ([]byte, error) {
 
 }
 
-func SnappyCompress(src []byte) []byte {
+func Snappy(src []byte) []byte {
 	return snappy.Encode([]byte(""), src)
 }
 

@@ -21,7 +21,7 @@ func TestXzFileDecompressionByte(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := XzCompress(dat)
+	data, err := Xz(dat)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -46,7 +46,7 @@ func TestXzFileDecompressionWrong(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := XzCompress(dat)
+	data, err := Xz(dat)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -75,7 +75,7 @@ func TestXzFileDecompressionNoEsist(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := XzCompress(dat)
+	data, err := Xz(dat)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -100,7 +100,7 @@ func TestXzFileDecompressionString(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	data, err := XzCompress(string(dat))
+	data, err := Xz(string(dat))
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -195,7 +195,7 @@ func TestXzDeXzCompressNoFile(t *testing.T) {
 
 func TestDeXzCompressWrongInvalidInput(t *testing.T) {
 	data := ""
-	_, err := XzCompress(data)
+	_, err := Xz(data)
 	if err == nil {
 		t.Log(err)
 	}
@@ -240,7 +240,7 @@ func TestFileXzDeXzCompress(t *testing.T) {
 }
 
 func TestFileXzXzCompress(t *testing.T) {
-	err := XzFileCompress("test.txt", "test.xz")
+	err := XzFile("test.txt", "test.xz")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -258,7 +258,7 @@ func TestFileXzXzCompress(t *testing.T) {
 }
 
 func TestFileXzXzCompressWrong(t *testing.T) {
-	err := XzFileCompress("test.txt", "/var/cache/test.xz")
+	err := XzFile("test.txt", "/var/cache/test.xz")
 	if err == nil {
 		t.Fatal(err)
 	}
@@ -271,7 +271,7 @@ func TestFileXzXzCompressWrong(t *testing.T) {
 }
 
 func TestFileXzXzCompressWrongInput(t *testing.T) {
-	err := XzFileCompress("boh", "test.xz")
+	err := XzFile("boh", "test.xz")
 	if err == nil {
 		t.Fatal(err)
 	}
@@ -285,7 +285,7 @@ func TestFileXzXzCompressWrongInput(t *testing.T) {
 
 func TestSnappyCompressDecompress(t *testing.T) {
 	str := "ciao carlo"
-	res := SnappyCompress([]byte(str))
+	res := Snappy([]byte(str))
 	dec, err := SnappyDecompress(res)
 	if err != nil {
 		t.Fatal(err)
