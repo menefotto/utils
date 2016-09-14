@@ -282,3 +282,16 @@ func TestFileXzXzCompressWrongInput(t *testing.T) {
 	}
 
 }
+
+func TestSnappyCompressDecompress(t *testing.T) {
+	str := "ciao carlo"
+	res := SnappyCompress([]byte(str))
+	dec, err := SnappyDecompress(res)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if str != string(dec) {
+		t.Fatal("something happened in str")
+	}
+
+}
