@@ -1,6 +1,6 @@
 package futils
 
-import "github.com/sonic/lib/syslogger"
+import "github.com/sonic/lib/log"
 
 type FileMoverEntry struct {
 	Source, Destination string
@@ -13,10 +13,10 @@ func NewFileMoverEntry(s, d string) *FileMoverEntry {
 type FileMover struct {
 	Entries chan *FileMoverEntry
 	Done    chan bool
-	Log     *syslogger.Logger
+	Log     *log.Logger
 }
 
-func NewFileMover(log *syslogger.Logger) *FileMover {
+func NewFileMover(log *log.Logger) *FileMover {
 
 	mover := &FileMover{
 		Entries: make(chan *FileMoverEntry, 32),

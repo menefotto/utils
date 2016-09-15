@@ -24,7 +24,7 @@ import (
 
 var Silent bool = false
 
-func Multi(baseurl, saveto string, pkgs []string) chan error {
+func Many(baseurl, saveto string, pkgs []string) chan error {
 	errchan := make(chan error)
 	var wg sync.WaitGroup
 

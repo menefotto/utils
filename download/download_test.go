@@ -40,7 +40,7 @@ func TestSingleDownloadWrong(t *testing.T) {
 	}
 }
 
-func TestMulti(t *testing.T) {
+func TestMany(t *testing.T) {
 	base := "http://archlinux.polymorf.fr/core/os/x86_64/"
 
 	pkgnames := []string{
@@ -48,7 +48,7 @@ func TestMulti(t *testing.T) {
 		"bash-4.3.046-1-x86_64.pkg.tar.xz",
 	}
 
-	errchan := Multi(base, ".", pkgnames)
+	errchan := Many(base, ".", pkgnames)
 	for i := 0; i < len(pkgnames); i++ {
 		<-errchan
 	}
@@ -60,7 +60,7 @@ func TestMulti(t *testing.T) {
 		}
 	}
 }
-func TestMultiWrong(t *testing.T) {
+func TestManyWrong(t *testing.T) {
 	base := "http://archlinux.polymorf.fr/core/os/x86_64/"
 
 	pkgnames := []string{
@@ -68,7 +68,7 @@ func TestMultiWrong(t *testing.T) {
 		"bass-4.3.046-1-x86_64.pkg.tar.xz",
 	}
 
-	errchan := Multi(base, ".", pkgnames)
+	errchan := Many(base, ".", pkgnames)
 	for i := 0; i < len(pkgnames); i++ {
 		msg := <-errchan
 		if msg == nil {

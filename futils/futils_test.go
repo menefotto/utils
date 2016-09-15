@@ -2,12 +2,11 @@ package futils
 
 import (
 	"fmt"
-	"log/syslog"
 	"os"
 	"testing"
 	"time"
 
-	"github.com/sonic/lib/syslogger"
+	"github.com/sonic/lib/log"
 )
 
 func TestDirList(t *testing.T) {
@@ -69,7 +68,7 @@ func TestFileMover(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	mover := NewFileMover(syslogger.New("testmover", syslog.LOG_ERR))
+	mover := NewFileMover(log.New("testmover", ""))
 	mover.Send(s+filename, d+filename)
 	time.Sleep(time.Second * 2)
 	mover.Close()
@@ -85,7 +84,7 @@ func TestFileMoverManyMoreThen32(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	mover := NewFileMover(syslogger.New("testmover", syslog.LOG_ERR))
+	mover := NewFileMover(log.New("testmover", ""))
 	for i := 35; i > 0; i-- {
 		mover.Send(s+filename, d+filename)
 	}
