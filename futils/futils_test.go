@@ -100,3 +100,29 @@ func TestUniquePath(t *testing.T) {
 	}
 
 }
+
+func TestFileExistYes(t *testing.T) {
+	if err := WriteFileOrDir("test.txt", []byte("ciao"), 0666); err != nil {
+		t.Fatal(err)
+	}
+	ok, err := FileExist("test.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !ok {
+		t.Fatal("should be ok")
+	}
+	os.Remove("test.txt")
+
+}
+
+func TestFileExistNoExist(t *testing.T) {
+	ok, err := FileExist("nofile.txt")
+	if err == nil {
+		t.Fatal(err)
+	}
+	if ok {
+		t.Fatal("should not exist")
+	}
+
+}

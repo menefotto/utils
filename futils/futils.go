@@ -80,6 +80,15 @@ func MoveFile(source, destination string) error {
 	return nil
 }
 
+func FileExist(filepath string) (bool, error) {
+	_, err := os.Stat(filepath)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
 func UniquePaths(paths []string) map[string]bool {
 	sort.Strings(paths)
 
