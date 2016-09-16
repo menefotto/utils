@@ -7,6 +7,7 @@
 package futils
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -87,6 +88,50 @@ func FileExist(filepath string) (bool, error) {
 	}
 
 	return true, nil
+}
+
+func RemoveList(testdir string, paths []string) error {
+
+	sort.Sort(sort.Reverse(sort.StringSlice(paths)))
+
+	for _, pathentry := range paths {
+		fmt.Println(pathentry)
+		if err := RemoveEval(path.Join(testdir, pathentry)); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func RemoveEval(filepath string) error {
+	info, err := os.Stat(filepath)
+	if err != nil {
+		return err
+	}
+
+	if info.IsDir() {
+		files, err := DirList(filepath)
+		if err != nil {
+			return err
+		}
+
+		if len(files) > 0 {
+			return nil
+		}
+
+		if err := os.RemoveAll(filepath); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	if err := os.Remove(filepath); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func UniquePaths(paths []string) map[string]bool {
