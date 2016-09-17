@@ -80,13 +80,13 @@ func MoveFile(source, destination string) error {
 	return nil
 }
 
-func FileExist(filepath string) (bool, error) {
+func FileExist(filepath string) bool {
 	_, err := os.Stat(filepath)
 	if err != nil {
-		return false, err
+		return false
 	}
 
-	return true, nil
+	return true
 }
 
 func RemoveList(testdir string, paths []string) error {

@@ -105,10 +105,7 @@ func TestFileExistYes(t *testing.T) {
 	if err := WriteFileOrDir("test.txt", []byte("ciao"), 0666); err != nil {
 		t.Fatal(err)
 	}
-	ok, err := FileExist("test.txt")
-	if err != nil {
-		t.Fatal(err)
-	}
+	ok := FileExist("test.txt")
 	if !ok {
 		t.Fatal("should be ok")
 	}
@@ -117,12 +114,15 @@ func TestFileExistYes(t *testing.T) {
 }
 
 func TestFileExistNoExist(t *testing.T) {
-	ok, err := FileExist("nofile.txt")
-	if err == nil {
-		t.Fatal(err)
-	}
+	ok := FileExist("nofile.txt")
 	if ok {
 		t.Fatal("should not exist")
 	}
 
+}
+
+func TestRemove(t *testing.T) {
+}
+
+func TestRemoveEval(t *testing.T) {
 }
