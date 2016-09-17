@@ -7,7 +7,6 @@
 package futils
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
@@ -95,7 +94,7 @@ func RemoveList(testdir string, paths []string) error {
 	sort.Sort(sort.Reverse(sort.StringSlice(paths)))
 
 	for _, pathentry := range paths {
-		fmt.Println(pathentry)
+		//fmt.Println(pathentry)
 		if err := RemoveEval(path.Join(testdir, pathentry)); err != nil {
 			return err
 		}
