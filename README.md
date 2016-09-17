@@ -6,4 +6,5 @@ This directory includes various utilities:
 - download provides downloading utilities.
 - terminal provides terminal utilities.
 - crypto provides crypto utilities.
+- funcionmiddleware provides middleware utilities.
 
