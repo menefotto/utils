@@ -91,8 +91,8 @@ func copy(src io.Reader, dst io.Writer, srcsize int64, pkgname string) error {
 			}
 
 			if !Silent {
-				message := misc.ProgressMsgBuild("Downloading " + pkgname)
-				misc.ProgressPrinter(message, total, percent)
+				message := cmdui.NewMsg("Downloading " + pkgname)
+				cmdui.ProgressPrinter(message, total, percent)
 			}
 
 			if total == srcsize {
