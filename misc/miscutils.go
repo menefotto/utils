@@ -2,16 +2,8 @@ package misc
 
 import (
 	"fmt"
-	"os"
 	"time"
 )
-
-func IsRootUser() bool {
-	if os.Geteuid() != 0 {
-		return false
-	}
-	return true
-}
 
 func GetDate() string {
 

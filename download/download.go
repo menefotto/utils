@@ -18,8 +18,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sonic/lib/cmdui"
 	"github.com/sonic/lib/errors"
-	"github.com/sonic/lib/utils/misc"
 )
 
 var Silent bool = false

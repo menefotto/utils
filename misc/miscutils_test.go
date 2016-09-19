@@ -6,13 +6,6 @@ import (
 	"time"
 )
 
-func TestIsRootUser(t *testing.T) {
-	yes := IsRootUser()
-	if yes {
-		t.Error("should not be root user")
-	}
-}
-
 func TestGetDate(t *testing.T) {
 	date := GetDate()
 	datesplit := strings.Split(date, " ")
