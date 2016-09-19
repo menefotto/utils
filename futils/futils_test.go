@@ -19,7 +19,6 @@ func TestDirList(t *testing.T) {
 	for _, dir := range list {
 		fmt.Println("Directory :", dir)
 	}
-	fmt.Println(list)
 }
 
 func TestWriteDirAndFile(t *testing.T) {
@@ -122,7 +121,95 @@ func TestFileExistNoExist(t *testing.T) {
 }
 
 func TestRemove(t *testing.T) {
+	err := os.Mkdir("test", 0777)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = os.Mkdir("test/test2", 0777)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fname, err := os.Create("test/test2/test.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer fname.Close()
+
+	list := []string{"test2/"}
+
+	err = RemoveList("test", list)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	os.RemoveAll("test")
 }
 
-func TestRemoveEval(t *testing.T) {
+func TestRemoveEvalAllCases(t *testing.T) {
+	// first case
+	err := os.Mkdir("test", 0777)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = RemoveEval("test")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = os.Stat("test")
+	if err == nil {
+		t.Fatal(err)
+	}
+
+	// second case
+	err = os.Mkdir("test", 0777)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fname2, err := os.Create("test/test.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer fname2.Close()
+
+	err = RemoveEval("test")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	_, err = os.Stat("test")
+	if err != nil {
+		t.Fatal(err)
+	}
+	os.RemoveAll("test")
+
+	// third case
+	err = os.Mkdir("test", 0777)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	fname3, err := os.Create("test/test.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer fname3.Close()
+
+	err = RemoveEval("test/test.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	os.Remove("test")
+
+	// 4th case
+	err = RemoveEval("testnoexist")
+	if err == nil {
+		t.Fatal(err)
+	}
+
 }

@@ -110,10 +110,7 @@ func RemoveEval(filepath string) error {
 	}
 
 	if info.IsDir() {
-		files, err := DirList(filepath)
-		if err != nil {
-			return err
-		}
+		files, _ := DirList(filepath)
 
 		if len(files) > 0 {
 			return nil

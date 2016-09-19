@@ -7,9 +7,8 @@ import (
 )
 
 func TestLimiter(t *testing.T) {
-	var f LimiterFunc = func() (interface{}, error) {
+	f := func() {
 		fmt.Println("Random num: ", rand.Intn(99))
-		return nil, nil
 	}
 
 	for i := 0; i < 40; i++ {
