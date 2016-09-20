@@ -47,10 +47,10 @@ func Single(baseurl, saveto, pkgname string) error {
 	client := clientInit()
 
 	resp, err := client.Get(baseurl + pkgname)
-	defer resp.Body.Close()
 	if err != nil {
 		return errors.Wrap(err)()
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		return fmt.Errorf(resp.Status)
