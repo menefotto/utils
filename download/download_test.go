@@ -1,6 +1,7 @@
 package download
 
 import (
+	"fmt"
 	"os"
 	"testing"
 )
@@ -49,8 +50,8 @@ func TestMany(t *testing.T) {
 	}
 
 	errchan := Many(base, ".", pkgnames)
-	for i := 0; i < len(pkgnames); i++ {
-		<-errchan
+	for i := 0; i < len(errchan); i++ {
+		fmt.Println(errchan[i])
 	}
 
 	for _, name := range pkgnames {
@@ -69,11 +70,8 @@ func TestManyWrong(t *testing.T) {
 	}
 
 	errchan := Many(base, ".", pkgnames)
-	for i := 0; i < len(pkgnames); i++ {
-		msg := <-errchan
-		if msg == nil {
-			t.Error("there should be an error")
-		}
+	for i := 0; i < len(errchan); i++ {
+		fmt.Println(errchan[i])
 	}
 
 }

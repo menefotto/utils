@@ -15,8 +15,9 @@ import (
 	"net/http"
 	"os"
 	"path"
-	"sync"
 	"time"
+
+	"golang.org/x/sync/errgroup"
 
 	"github.com/sonic/lib/cmdui"
 	"github.com/sonic/lib/errors"
@@ -24,23 +25,30 @@ import (
 
 var Silent bool = false
 
-func Many(baseurl, saveto string, pkgs []string) chan error {
-	errchan := make(chan error)
-	var wg sync.WaitGroup
+func Many(baseurl, saveto string, pkgs []string) []error {
+	var (
+		wg   errgroup.Group
+		errs []error = []error{}
+	)
 
-	for _, pkg := range pkgs {
-		wg.Add(1)
-		go func(baseurl, pkgname string, wg sync.WaitGroup) {
-			err := Single(baseurl, saveto, pkgname)
+	for _, pkgname := range pkgs {
+		pkg := pkgname
+
+		wg.Go(func() error {
+			err := Single(baseurl, saveto, pkg)
 			if err != nil {
-				errchan <- fmt.Errorf("name: %v,%v\n", pkg, err)
-			} else {
-				errchan <- nil
+				return errors.New(err.Error() + " : " + pkgname)
 			}
-			wg.Done()
-		}(baseurl, pkg, wg)
+
+			return nil
+		})
 	}
-	return errchan
+
+	if err := wg.Wait(); err != nil {
+		errs = append(errs, err)
+	}
+
+	return errs
 }
 
 func Single(baseurl, saveto, pkgname string) error {
