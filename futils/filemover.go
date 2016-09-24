@@ -56,6 +56,6 @@ func (m *FileMover) Close() {
 	m.Done <- true
 }
 
-func (m *FileMover) Send(origin, destination string) {
+func (m *FileMover) Move(origin, destination string) {
 	m.Entries <- NewFileMoverEntry(origin, destination)
 }

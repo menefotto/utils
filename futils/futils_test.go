@@ -68,7 +68,7 @@ func TestFileMover(t *testing.T) {
 	}
 
 	mover := NewFileMover(log.New("testmover", ""))
-	mover.Send(s+filename, d+filename)
+	mover.Move(s+filename, d+filename)
 	time.Sleep(time.Second * 2)
 	mover.Close()
 }
@@ -85,7 +85,7 @@ func TestFileMoverManyMoreThen32(t *testing.T) {
 
 	mover := NewFileMover(log.New("testmover", ""))
 	for i := 35; i > 0; i-- {
-		mover.Send(s+filename, d+filename)
+		mover.Move(s+filename, d+filename)
 	}
 	time.Sleep(time.Second * 0)
 	mover.Close()
